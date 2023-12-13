@@ -5,8 +5,7 @@ using System.IO;
 namespace MyApp {
     internal class Program {
         static void Main(string[] args) {
-            string path;
-            string[] dane;
+            string[] data;
             int sum1 = 0;
             int sum2 = 0;
             int id = 1; //Game ID
@@ -15,12 +14,11 @@ namespace MyApp {
             const int maxGreen = 13;
             const int maxBlue = 14;
 
-            //path = @"..\..\..\InputTest.txt";
-            path = @"..\..\..\InputFull.txt";
+            //string path = @"..\..\..\InputTest.txt";
+            string path = @"..\..\..\InputFull.txt";
+            data = File.ReadAllLines(path);
 
-            dane = File.ReadAllLines(path);
-
-            foreach (string line in dane) {
+            foreach (string line in data) {
                 if (line[0] == '#') continue;
                 string[] record = line.Split(":");
                 string[] games = record[1].Split(";");
@@ -50,9 +48,9 @@ namespace MyApp {
                             if (number > maxBlue) setOK = false;
                             if (number > mb) mb = number;
                         }
-                        //if (!setOK) break;
+                        //if (!setOK) break;    // <- disabled for part 2
                     }
-                    //if (!setOK) break;
+                    //if (!setOK) break;        // <- disabled for part 2
                 }
                 if (setOK) sum1 += id;
 

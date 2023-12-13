@@ -60,8 +60,6 @@ namespace MyApp {
             // Count tiles on the original map that ARE NOT marked with 'O' on the extended map, at their corresponding position
             int cnt = CountInternalTiles();
 
-            //Console.WriteLine("Internal = " + cnt);
-            //Console.WriteLine("boundaryLen = " + boundaryLen);
             Console.WriteLine("RESULT 2: " + (cnt - loopLen));
 
             // RESULT 1: 7097

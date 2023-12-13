@@ -6,29 +6,21 @@ using System.Threading;
 
 class Program {
     static void Main() {
-        string[] dane;
-        string path = "";
-
-        //path = @"..\..\..\InputTest.txt";
-        path = @"..\..\..\InputFull.txt";
-        
-        dane = File.ReadAllLines(path);
-
+        string[] data;
         int sum = 0;
 
-        foreach (string line in dane) {
-            //Console.WriteLine(line);
-            string l = line.ToLower();
+        //path = @"..\..\..\InputTest.txt";
+        string path = @"..\..\..\InputFull.txt";
+        data = File.ReadAllLines(path);
+
+        foreach (string line in data) {
+            string l = line;
 
             l = prepareLine(line);  // <- Enable for part 2
 
             string strDigits = new string(l.Where(char.IsDigit).ToArray());
-            //Console.WriteLine(strDigits);
-
             int number = getNumber(strDigits);
             sum += number;
-
-            //Console.WriteLine(number.ToString());
         }
 
         Console.WriteLine("RESULT: " + sum.ToString());
@@ -44,8 +36,6 @@ class Program {
         return int.Parse(strNum);
     }
     static string prepareLine(string line) {
-        //Console.WriteLine(line);
-
         if (line.Length == 1) { return line; }
 
         string[] strDigits = { "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
@@ -83,7 +73,6 @@ class Program {
             if (done) break;
         }
 
-        //Console.WriteLine(line);
         return line;
     }
 }

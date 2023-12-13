@@ -23,12 +23,9 @@ namespace MyApp {
 
             for (i = 0; i < data.Length; i++) {
                 string line = data[i].Replace("  ", " ");
-                //Console.WriteLine(line);
-
                 string[] sets = line.Split('|');
                 string str1 = (sets[0].Split(':'))[1];
                 string str2 = sets[1];
-
                 string[] numsWin = str1.Split(' ');
                 string[] nums = str2.Split(' ');
 
@@ -39,7 +36,6 @@ namespace MyApp {
 
                 double score = 0;
                 if (m != 0) score = 1 * Math.Pow(2, m - 1);
-                //Console.WriteLine("m=" + m + " score=" + score);
                 cards.Add(line);
                 pts[i] = m;
                 sum1 += (int)score;

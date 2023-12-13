@@ -91,7 +91,7 @@ namespace MyApp {
         }
 
         static void StartThread(int id, long seed, long range, List<long[]>[] tab) {
-            Console.WriteLine("Start id=" + id + "\tSeed=" + seed + "\trange=" + range);
+            Console.WriteLine("Start " + id + "\tSeed=" + seed + "\trange=" + range);
             long ml = long.MaxValue;
             for (long s = seed; s < seed + range; s++) {
                 long l = GetLocation(s, tab);
