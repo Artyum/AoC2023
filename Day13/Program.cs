@@ -22,16 +22,14 @@ namespace MyApp {
 
             for (int i = 0; i <= data.Count; i++) {
                 if (i == data.Count || data[i].Length == 0) {
-                    //Console.WriteLine("Pattern");
-
                     // Convert rows and columns to integers where '.'=0 and '#'=1 making a binary number for further comparisons
                     var hashTabH = CalcHashTabH(pattern);
                     var hashTabV = CalcHashTabV(pattern);
 
                     // PART 1
                     int centerH1 = FindMirror(hashTabH);
-                    centerListH.Add(centerH1);
                     int centerV1 = FindMirror(hashTabV);
+                    centerListH.Add(centerH1); 
                     centerListV.Add(centerV1);
                     if (centerH1 > 0) result1 += 100 * centerH1;
                     if (centerV1 > 0) result1 += centerV1;
@@ -76,7 +74,6 @@ namespace MyApp {
                     return center + 1;
                 }
             }
-
             return -1;
         }
 
@@ -90,7 +87,7 @@ namespace MyApp {
                     long op1 = tab[i];
                     long op2 = tab[i + a];
                     long xor = op1 ^ op2;
-                    long bin = xor & (xor - 1);  // if bin==0 than every bit is different
+                    long bin = xor & (xor - 1);  // if bin==0 than at op1 and op2 only one bit was different
 
                     if ((op1 != op2) && bin != 0) { mirror = false; break; }
                     a += 2;
