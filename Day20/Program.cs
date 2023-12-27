@@ -1,10 +1,12 @@
-﻿class Broadcaster {
-    public List<string> Outputs { get; set; }
+﻿using System.Security.Cryptography.X509Certificates;
+
+class Broadcaster {
+    List<string> Outputs { get; set; }
     public Broadcaster() {
         Outputs = new List<string>();
     }
     public void SetOutputs(string[] dstList) {
-        foreach (string dst in dstList) Outputs.Add(dst);
+        Outputs = [.. dstList];
     }
     public void SendPulses(List<Pulse> pulseList) {
         foreach (var output in Outputs) {
@@ -19,9 +21,9 @@
 }
 
 class FlipFlop {
-    public string Name { get; set; }
-    public byte State { get; set; }
-    public List<string> Outputs { get; set; }
+    string Name { get; set; }
+    byte State { get; set; }
+    List<string> Outputs { get; set; }
     public FlipFlop(string name, string[] dstList) {
         Name = name;
         State = 0;
@@ -49,9 +51,9 @@ class FlipFlop {
 }
 
 class Conjunction {
-    public string Name { get; set; }
-    public List<string> Outputs { get; set; }
-    public Dictionary<string, byte> Inputs { get; set; }
+    string Name { get; set; }
+    List<string> Outputs { get; set; }
+    Dictionary<string, byte> Inputs { get; set; }
     public Conjunction(string name, string[] dstList) {
         Name = name;
         Inputs = new Dictionary<string, byte>();
@@ -77,6 +79,9 @@ class Conjunction {
     public bool IsInitialState() {
         if (Inputs.Sum(x => x.Value) == 0) return true; else return false;
     }
+    public bool FindOutput(string name) {
+        return Outputs.Contains(name);
+    }
 }
 
 class Pulse {
@@ -90,7 +95,6 @@ internal class Program {
         string[] data;
         Broadcaster broadcaster = new Broadcaster();
         List<Pulse> pulseList = new List<Pulse>();
-
         Dictionary<string, FlipFlop> flipFlops = new Dictionary<string, FlipFlop>();
         Dictionary<string, Conjunction> conjunctions = new Dictionary<string, Conjunction>();
 
@@ -121,13 +125,11 @@ internal class Program {
             }
         }
 
-        // Set inputs for conjunctions
+        // Find inputs for conjunction modules
         foreach (var con in conjunctions) {
             foreach (string line in data) {
                 string[] items = line.Replace(" ", "").Split("->");
-                if (items[1].Contains(con.Key)) {
-                    conjunctions[con.Key].SetInput(items[0].Replace("%", "").Replace("&", ""));
-                }
+                if (items[1].Contains(con.Key)) conjunctions[con.Key].SetInput(items[0].Replace("%", "").Replace("&", ""));
             }
         }
 
@@ -145,7 +147,7 @@ internal class Program {
 
         // Get modules sending to finalMod
         Dictionary<string, long> modules = new Dictionary<string, long>();
-        foreach (var con in conjunctions) if (con.Value.Outputs.Contains(finalMod)) modules.Add(con.Key, 0);
+        foreach (var con in conjunctions) if (con.Value.FindOutput(finalMod)) modules.Add(con.Key, 0);
 
         while (!end) {
             PushButton(broadcaster, pulseList);
@@ -166,7 +168,7 @@ internal class Program {
                 // Find the button press number when modules send a high pulse to finalMod
                 foreach (Pulse pulse in pulseList) {
                     foreach (var module in modules) {
-                        if (pulse.Src == module.Key && pulse.Value == 1) { modules[module.Key] = btnPress; }
+                        if (modules[module.Key] == 0 && pulse.Src == module.Key && pulse.Value == 1) modules[module.Key] = btnPress;
                     }
                 }
             }
@@ -186,7 +188,7 @@ internal class Program {
             btnPress++;
         }
 
-        // PART 2 - When all modules simultaneously send a high pulse to finalMod, then finalMod will send a low pulse to rx
+        // PART 2 - When all inputs of the finalMod simultaneously send a high pulse, then finalMod will send a low pulse to rx
         // Find least common multiple
         long result2 = 1;
         foreach (var module in modules) result2 = calcLCM(result2, module.Value);
