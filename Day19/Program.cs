@@ -32,15 +32,15 @@ namespace MyApp {
         public static List<string> paths = new List<string>();
 
         static void Main(string[] args) {
-            string path = @"..\..\..\InputTest.txt";
-            //string path = @"..\..\..\InputFull.txt";
+            //string path = @"..\..\..\InputTest.txt";
+            string path = @"..\..\..\InputFull.txt";
             data = File.ReadAllLines(path);
 
             GetParts(GetWorkflows());
             foreach (Part part in parts) ProcessPart(part, "in");
 
-            Console.WriteLine("RESULT: " + result);
-            // RESULT: 398527
+            Console.WriteLine("RESULT 1: " + result);
+            // RESULT 1: 398527
 
             FindPaths("in", "", "");
             foreach (var p in paths) Console.WriteLine(p);
